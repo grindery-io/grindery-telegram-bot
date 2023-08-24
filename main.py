@@ -20,16 +20,17 @@ async def send_to_webhook(data):
         async with session.post(WEBHOOK_URL, json=data) as response:
             return await response.text()
         
-def format_contact_data(contact):
+def format_contact_data(data):
     return {
-        "user_id": contact.user_id,
-        "first_name": contact.first_name,
-        "last_name": contact.last_name,
-        "phone_number": contact.phone_number
+        "user_id": data.chat.id,
+        "contact_user_id": data.contact.user_id,
+        "contact_first_name": data.contact.first_name,
+        "contact_last_name": data.contact.last_name,
+        "contact_phone_number": data.contact.phone_number
     }
 
 async def get_shared_contact(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    contact = format_contact_data(contact=update.message.contact)    
+    contact = format_contact_data(data=update.message)
     response = await send_to_webhook(contact)
     print(f"Webhook response: {response}")
 
