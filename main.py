@@ -4,6 +4,9 @@ import logging
 import aiohttp
 import os
 from dotenv import load_dotenv
+from flask import Flask
+import threading
+
 
 load_dotenv()
 
@@ -34,7 +37,16 @@ async def get_shared_contact(update: Update, context: ContextTypes.DEFAULT_TYPE)
     response = await send_to_webhook(contact)
     print(f"Webhook response: {response}")
 
+app = Flask(__name__)
+
+@app.route("/")
+def hello_world():
+    return "<p>Hello, World!</p>"
+
 if __name__ == '__main__':
+    t = threading.Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.getenv("PORT") or 3000)))
+    t.daemon = True
+    t.start()
     application = ApplicationBuilder().token(token=TOKEN).build()
     
     get_shared_contact_handler = MessageHandler(filters.CONTACT, get_shared_contact)
