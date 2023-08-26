@@ -10,8 +10,8 @@ import threading
 
 load_dotenv()
 
-TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-WEBHOOK_URL = os.getenv('FLOW_XO_WEBHOOK_URL')
+TOKEN = ''
+WEBHOOK_URL = ''
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
