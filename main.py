@@ -10,19 +10,14 @@ import threading
 
 load_dotenv()
 
-TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+# TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TOKEN = ''
 WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/14479245/35hqzv0/'
-DEBUG_URL = 'https://webhook.site/91aa404f-0826-4298-8bde-91196e6d2ec4'
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
-
-async def debug(data):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(DEBUG_URL, json=data) as response:
-            return await response.text()
         
 async def send_to_webhook(data):
     async with aiohttp.ClientSession() as session:
@@ -39,14 +34,8 @@ def format_contact_data(data):
     }
 
 async def get_shared_contact(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await debug('Foo - 2')
     contact = format_contact_data(data=update.message)
-    await debug('Foo - 3')
-    await debug(contact)
     response = await send_to_webhook(contact)
-    await debug('Foo - 4 ')
-    await debug(WEBHOOK_URL)
-    await debug(response)
     print(f"Webhook response: {response}")
 
 app = Flask(__name__)
